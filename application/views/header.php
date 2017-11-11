@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-<title>$title</title>
+<title>SMS Vote Portal</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="<?=base_url();?>/css/w3css.css">
 <link rel="stylesheet" href="<?=base_url();?>/css/google-fonts.css">
 <link rel="stylesheet" href="<?=base_url();?>/css/fa/font-awesome.min.css">
+<link rel="stylesheet" href="<?=base_url();?>/css/bootstrap.min.css">
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
@@ -22,17 +23,11 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <p class="w3-text-grey">MAIN MENU</p>
   </div>
   <div class="w3-bar-block">
-    <a href="#portfolio" onclick="w3_close()" class="w3-bar-item w3-button w3-padding w3-text-teal"><i class="fa fa-th-large fa-fw w3-margin-right"></i>MANAGE CANDIDATES</a>
-    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-user fa-fw w3-margin-right"></i>MANAGE POSITIONS</a>
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding"><i class="fa fa-envelope fa-fw w3-margin-right"></i>VIEW LIVE RESULTS</a>
-  </div>
-  <div class="w3-panel w3-large">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
+    <a href="<?=site_url("home")?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 0 ? "w3-text-teal" : ""; ?>"><i class="fa fa-users fa-fw w3-margin-right"></i>MANAGE CANDIDATES</a>
+    <a href="<?php echo site_url("home/showManageCategories");?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 1 ? "w3-text-teal" : ""; ?>"><i class="fa fa-th fa-fw w3-margin-right"></i>MANAGE CATEGORIES</a>
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 2 ? "w3-text-teal" : ""; ?>"><i class="fa fa-terminal fa-fw w3-margin-right"></i>CONSOLE</a>
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 3 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>VIEW LIVE RESULTS</a>
+    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 3 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>MANAGE ELIGIBLE VOTERS</a>
   </div>
 </nav>
 
@@ -47,13 +42,15 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <a href="#"><img src="/w3images/avatar_g2.jpg" style="width:65px;" class="w3-circle w3-right w3-margin w3-hide-large w3-hover-opacity"></a>
     <span class="w3-button w3-hide-large w3-xxlarge w3-hover-text-grey" onclick="w3_open()"><i class="fa fa-bars"></i></span>
     <div class="w3-container">
-    <h1><b>My Portfolio</b></h1>
+    <h1><b><?=$title?></b></h1>
     <div class="w3-section w3-bottombar w3-padding-16">
-      <span class="w3-margin-right">Filter:</span>
-      <button class="w3-button w3-black">ALL</button>
-      <button class="w3-button w3-white"><i class="fa fa-diamond w3-margin-right"></i>Design</button>
-      <button class="w3-button w3-white w3-hide-small"><i class="fa fa-photo w3-margin-right"></i>Photos</button>
-      <button class="w3-button w3-white w3-hide-small"><i class="fa fa-map-pin w3-margin-right"></i>Art</button>
+      <?php
+      $c = count($menu);
+      for ($x = 0; $x < $c; $x++) {
+        echo "<a href=\"" . $menu[$x][2] . "\" class=\"w3-button w3-white\"><i class=\"fa " . $menu[$x][0] . " w3-margin-right\"></i>" . $menu[$x][1] . "</a>";
+      }
+      ?>
     </div>
     </div>
   </header>
+  <p class="w3-padding"><?=$message?></p>

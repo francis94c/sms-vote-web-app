@@ -1,4 +1,11 @@
 <?php
+
+class ObjectModels {
+  static function getName() {
+    return "ObjectModels";
+  }
+}
+
 class Candidate {
   var $firstName;
   var $lastName;
@@ -18,10 +25,14 @@ class Candidate {
     $this->firstName = $firstName;
     $this->lastName = $lastName;
     $this->middleName = $middleName;
+    $this->contestingFor = $contestingFor;
     $ci =& get_instance();
     $ci->load->helper('string');
     $this->code = strtoupper(random_string('alnum', 5));
-    $this->image = strtoupper(random_string('alnum', 5));
+    $this->image = strtoupper(random_string('alnum', 10));
+  }
+  function getImageFileName() {
+    return $this->image . ".jpg";
   }
   /**
    * [getArray description]

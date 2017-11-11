@@ -18,13 +18,13 @@ class BallotBox extends CI_Model {
     $flags = array("fraud"=>0, "errors"=>0);
     $c = count($codes);
     for ($x = 0; $x < $c; $x++) {
-	  $cid = $this->Candidates->resolveCode($codes[$x]);
-	  if ($cid == -1) {
-		  $flags["errors"] = $flags["errors"] + 1;
-		  continue;
-	  }
-	  if (!$this->castVote($voter, $cid)) {
-		log_message("error", "Fraud! Could not cast vote " . $voter . "--" . $cid);
+      $cid = $this->Candidates->resolveCode($codes[$x]);
+	    if ($cid == -1) {
+        $flags["errors"] = $flags["errors"] + 1;
+		    continue;
+	    }
+	    if (!$this->castVote($voter, $cid)) {
+        log_message("error", "Fraud! Could not cast vote " . $voter . "--" . $cid);
         $flags["fraud"] = $flags["fraud"] + 1;
       } 
     }

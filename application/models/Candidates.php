@@ -11,10 +11,10 @@ class Candidates extends CI_Model {
   function resolveCode($code) {
     $this->db->where("code", $code);
     $query = $this->db->get("candidates");
-	if ($query->num_rows() == 1) {
-	  return $query->result()[0]->id;
-	}
-    return -1
+    if ($query->num_rows() == 1) {
+      return $query->result()[0]->id;
+	  }
+    return -1;
   }
   /**
    * [getCategory description]
@@ -35,7 +35,7 @@ class Candidates extends CI_Model {
     if ($this->session->userdata("validated")) {
       return $this->db->insert("candidates", $candidate->getArray());
     } else {
-      show_error("Access Denied", 500);
+      return false;
     }
   }
   /**
