@@ -38,6 +38,14 @@ class Candidates extends CI_Model {
       return false;
     }
   }
+  function getImageFileName($id) {
+    $query = $this->db->get_where("candidates", array("id"=>$id));
+    if ($query->num_rows() > 0) {
+      return $query->result()[0]->image . ".jpg";
+    } else {
+      return "null";
+    }
+  }
   /**
    * [removeCandidate description]
    * @param  [type] $id [description]
@@ -57,6 +65,10 @@ class Candidates extends CI_Model {
       return $query->result();
     }
     return null;
+  }
+  function getCandidatesInCategory($cid) {
+    $query = $this->db->get_where("candidates", array("contesting_for"=>$cid));
+    return $query->result_array();
   }
 }
 ?>

@@ -15,6 +15,9 @@ class Categories extends CI_Model {
     $this->db->order_by("name", "ASC");
     return $this->db->get("categories")->result_array();
   }
+  function getCategoryId($name) {
+    return $this->db->get_where("categories", array("name"=>$name))->result_array()[0];
+  }
   function getCategoryName($id) {
     $query = $this->db->get_where("categories", array("id"=>$id));
     if ($query->num_rows() > 0) {

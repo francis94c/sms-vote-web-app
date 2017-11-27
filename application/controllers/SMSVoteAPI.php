@@ -1,6 +1,7 @@
 <?php
 class SMSVoteAPI extends CI_Controller {
   function __construct() {
+    parent::__construct();
     $this->load->model("preferences");
   }
   function flagModuleConnection() {
@@ -19,5 +20,19 @@ class SMSVoteAPI extends CI_Controller {
       echo "0";
     }
   }
+  function vote() {
+    $voter = $this->uri->segment(3);
+    $codes = array();
+    $index = 4;
+    $buffer = $this->uri->segment($index);
+    while ($buffer != "") {
+      $codes[] = $buffer;
+      ++$index;
+      $buffer = $this->uri->segment($index);
+    }
+    $this->load->model("BallotBox");
+    echo json_encode($this->BallotBox->vote($voter, $codes));
+  }
+
 }
 ?>

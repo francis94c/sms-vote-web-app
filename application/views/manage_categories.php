@@ -1,4 +1,4 @@
-<form class="input-form" action="<?=base_url()?>index.php/ManageCategories/addCategory" method="post">
+<?php echo form_open("Home/addCategory");?>
   <div class="input-group w3-margin margin-bottom-sm">
     <span class="input-group-addon"><i class="fa fa-camera-o fa-fw"></i></span>
     <input class="form-control" name="category" type="text" placeholder="Name">

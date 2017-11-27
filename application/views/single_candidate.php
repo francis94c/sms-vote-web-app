@@ -1,1 +1,1 @@
-<li class="w3-display-container"><img class="w3-margin" src="<?=$image_url?>"/> <?=$name . " &gt; " . $category?></li>
+<li class="w3-display-container"><img class="w3-margin" src="<?=$image_url?>"/> <?=$name . " &gt; " . $category . " &gt; " . $code?><a class="w3-button w3-display-right" href="<?=site_url("home/deleteCandidate/" . $id)?>">&times;</a></li>

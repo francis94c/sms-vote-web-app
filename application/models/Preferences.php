@@ -6,14 +6,14 @@ class Preferences extends CI_Model {
   }
 
   public function getPreference($key) {
-    $this->where("key_name", $key);
+    $this->db->where("key_name", $key);
     $query = $this->get("preferences");
     return $query->result()[0]->key_value;
   }
 
   public function setPreference($key, $value) {
-    $this->where("key_name", $key);
-    return $this->update("preferences", array("key_value"=>$value));
+    $this->db->where("key_name", $key);
+    return $this->db->update("preferences", array("key_value"=>$value));
   }
 
   private function createPreference($key, $value) {

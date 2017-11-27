@@ -27,6 +27,8 @@ class Home extends CI_Controller {
       $buffer["name"] = $candidates[$x]->first_name . " " . $candidates[$x]->last_name . " " . $candidates[$x]->middle_name;
       $buffer["image_url"] = base_url("images/" . $candidates[$x]->image . ".jpg");
       $buffer["category"] = $this->categories->getCategoryName($candidates[$x]->contesting_for);
+      $buffer["id"] = $candidates[$x]->id;
+      $buffer["code"] = $candidates[$x]->code;
       $this->load->view("single_candidate", $buffer);
     }
     $this->load->view("ul_close");
@@ -57,7 +59,7 @@ class Home extends CI_Controller {
       "last_name" => "",
       "category" => "");
     $this->load->view("header", $data);
-    $this->load->view("manage_categories");
+    $this->load->view("manage_categories", $data);
   }
 
   function isValidated() {
@@ -90,7 +92,7 @@ class Home extends CI_Controller {
     $data["menu"] = array();
     $data["flag"] = 1;
     $this->load->view("header", $data);
-    $this->load->view("manage_categories");
+    $this->load->view("manage_categories", $data);
   }
 
   function addCandidate() {
@@ -148,6 +150,27 @@ class Home extends CI_Controller {
         show_error("Access Denied", 500);
       }
     }
+  }
+
+  function deleteCandidate($id) {
+    $this->load->model("candidates");
+    unlink(FCPATH . "images/" . $this->candidates->getImageFileName($id));
+    $this->db->where(array("id"=>$id));
+    $this->db->delete("candidates");
+    $this->index();
+  }
+
+  function showLiveResults() {
+    $data["title"] = "Live Results";
+    $data["menu"] = array();
+    $data["message"] = "";
+    $data["flag"] = 0;
+    $this->load->view("header", $data);
+    $this->load->model("candidates");
+    $this->load->model("ballotbox");
+    $this->load->model("categories");
+    $this->load->view("ul_open");
+    
   }
 
 }

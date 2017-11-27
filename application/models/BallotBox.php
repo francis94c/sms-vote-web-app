@@ -23,12 +23,25 @@ class BallotBox extends CI_Model {
         $flags["errors"] = $flags["errors"] + 1;
 		    continue;
 	    }
-	    if (!$this->castVote($voter, $cid)) {
-        log_message("error", "Fraud! Could not cast vote " . $voter . "--" . $cid);
+      if ($this->validateVoter($voter)) {
+        if (!$this->castVote($this->resolveVoter($voter), $cid)) {
+          log_message("error", "Fraud! Could not cast vote " . $voter . "--" . $cid);
+          $flags["fraud"] = $flags["fraud"] + 1;
+        }
+      } else {
+        log_message("error", "Fraud! Voter Not Valid " . $voter . "--" . $cid);
         $flags["fraud"] = $flags["fraud"] + 1;
-      } 
+        break;
+      }
     }
     return $flags;
+  }
+  function getResultForCandidate($candidate) {
+    $query = $this->db->get_where("ballot_box", array("candidate"=>$candidate));
+    $votes = $query->num_rows();
+    $query = $this->db->get("voters");
+    $result = ($votes / $query->num_rows()) * 100;
+    return $result;
   }
   /**
    * [castVote description]
@@ -39,6 +52,16 @@ class BallotBox extends CI_Model {
   private function castVote($voter, $candidate) {
     $data = array("candidate"=>$candidate, "voter"=>$voter, "category"=>$this->Candidates->getCategory($candidate));
     return $this->db->insert("ballot_box", $data);
+  }
+  private function validateVoter($voter) {
+    $query = $this->db->get_where("voters", array("identity_key"=>$voter));
+    if ($query->num_rows() > 0) {
+      return true;
+    }
+    return false;
+  }
+  private function resolveVoter($idKey) {
+    return $this->db->get_where("voters", array("identity_key" => $idKey))->result->$id;
   }
 }
 ?>
