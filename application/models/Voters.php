@@ -6,8 +6,11 @@ class Voters extends CI_Model {
   function getVoters() {
     return $this->db->get("voters")->result_array();
   }
-  function deleteVoter($id) {
+  function deleteVoterById($id) {
     return $this->db->delete("voters", array("id"=>$id));
+  }
+  function deleteVoterByPhoneNumber($phoneNumber) {
+    return $this->db->delete("voters", array("identity_key"=>$phoneNumber));
   }
 }
 ?>

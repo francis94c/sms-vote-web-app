@@ -227,7 +227,7 @@ class Home extends CI_Controller {
   }
   function deleteVoter() {
     $this->load->model("voters");
-    if ($this->voters->deleteVoter($this->uri->segment(3))) {
+    if ($this->voters->deleteVoterById($this->uri->segment(3))) {
       $this->showManageEligibleVoters();
     } else {
       show_error("An unknown error occured", 500);
