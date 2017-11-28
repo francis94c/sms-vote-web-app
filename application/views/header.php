@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="<?=base_url();?>/css/google-fonts.css">
 <link rel="stylesheet" href="<?=base_url();?>/css/fa/font-awesome.min.css">
 <link rel="stylesheet" href="<?=base_url();?>/css/bootstrap.min.css">
+<script type="text/javascript" src="<?=base_url("js/bootstrap.min.js")?>"></script>
 <style>
 body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
 </style>
@@ -25,9 +26,9 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
   <div class="w3-bar-block">
     <a href="<?=site_url("home")?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 0 ? "w3-text-teal" : ""; ?>"><i class="fa fa-users fa-fw w3-margin-right"></i>MANAGE CANDIDATES</a>
     <a href="<?php echo site_url("home/showManageCategories");?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 1 ? "w3-text-teal" : ""; ?>"><i class="fa fa-th fa-fw w3-margin-right"></i>MANAGE CATEGORIES</a>
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 2 ? "w3-text-teal" : ""; ?>"><i class="fa fa-terminal fa-fw w3-margin-right"></i>CONSOLE</a>
+    <a href="<?php echo site_url("home/showConsole");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 2 ? "w3-text-teal" : ""; ?>"><i class="fa fa-terminal fa-fw w3-margin-right"></i>CONSOLE</a>
     <a href="<?php echo site_url("home/showLiveResults");?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 3 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>VIEW LIVE RESULTS</a>
-    <a href="#contact" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 3 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>MANAGE ELIGIBLE VOTERS</a>
+    <a href="<?php echo site_url("home/showManageEligibleVoters");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 4 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>MANAGE ELIGIBLE VOTERS</a>
   </div>
 </nav>
 

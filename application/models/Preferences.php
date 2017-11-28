@@ -7,7 +7,7 @@ class Preferences extends CI_Model {
 
   public function getPreference($key) {
     $this->db->where("key_name", $key);
-    $query = $this->get("preferences");
+    $query = $this->db->get("preferences");
     return $query->result()[0]->key_value;
   }
 

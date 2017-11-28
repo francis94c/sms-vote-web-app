@@ -7,7 +7,7 @@ first_name VARCHAR(15) NOT NULL, last_name VARCHAR(15) NOT NULL,
 middle_name VARCHAR(15), contesting_for int(2) NOT NULL, code VARCHAR(4),
 image VARCHAR(10) NOT NULL, FOREIGN KEY (contesting_for) REFERENCES categories(id)) Engine=InnoDB;
 /*voters*/
-CREATE TABLE voters (id int(7) AUTO_INCREMENT PRIMARY KEY, identity_key VARCHAR(15)) Engine=InnoDB;
+CREATE TABLE voters (id int(7) AUTO_INCREMENT PRIMARY KEY, identity_key VARCHAR(15) UNIQUE) Engine=InnoDB;
 /*preferences*/
 CREATE TABLE preferences (id int(2) AUTO_INCREMENT PRIMARY KEY,
 key_name VARCHAR(20), key_value VARCHAR(20)) Engine=InnoDB;

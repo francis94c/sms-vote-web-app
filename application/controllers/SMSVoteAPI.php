@@ -21,17 +21,22 @@ class SMSVoteAPI extends CI_Controller {
     }
   }
   function vote() {
-    $voter = $this->uri->segment(3);
-    $codes = array();
-    $index = 4;
-    $buffer = $this->uri->segment($index);
-    while ($buffer != "") {
-      $codes[] = $buffer;
-      ++$index;
+    $this->load->model("console");
+    if ($this->console->checkElectionState()) {
+      $voter = $this->uri->segment(3);
+      $codes = array();
+      $index = 4;
       $buffer = $this->uri->segment($index);
+      while ($buffer != "") {
+        $codes[] = $buffer;
+        ++$index;
+        $buffer = $this->uri->segment($index);
+      }
+      $this->load->model("BallotBox");
+      echo json_encode($this->BallotBox->vote($voter, $codes));
+    } else {
+      echo json_encode(array("fraud"=>-1, "errors"=>-1));
     }
-    $this->load->model("BallotBox");
-    echo json_encode($this->BallotBox->vote($voter, $codes));
   }
 
 }

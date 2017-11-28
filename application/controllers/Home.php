@@ -164,14 +164,74 @@ class Home extends CI_Controller {
     $data["title"] = "Live Results";
     $data["menu"] = array();
     $data["message"] = "";
-    $data["flag"] = 0;
+    $data["flag"] = 3;
     $this->load->view("header", $data);
     $this->load->model("candidates");
     $this->load->model("ballotbox");
     $this->load->model("categories");
     $this->load->view("ul_open");
-    
+    $categories = $this->categories->getCategories();
+    for ($x = 0; $x < count($categories); $x++) {
+      $this->load->view("panel", array("text" => $categories[$x]["name"]));
+      $candidates = $this->candidates->getCandidatesInCategory($categories[$x]["id"]);
+      for ($y = 0; $y < count($candidates); $y++) {
+        $data = array();
+        $data["image_url"] = base_url("images/" . $candidates[$y]["image"] . ".jpg");
+        $data["name"] = $candidates[$y]["first_name"] . " " . $candidates[$y]["last_name"] . " " . $candidates[$y]["middle_name"];
+        $data["percent"] = $this->ballotbox->getResultForCandidate($candidates[$y]["id"]);
+        $this->load->view("status_item", $data);
+      }
+    }
+    $this->load->view("ul_close");
+    $this->load->view("scripts/jquery");
+    $this->load->view("scripts/live_results");
   }
-
+  function showConsole() {
+    $data["title"] = "Console";
+    $data["menu"] = array();
+    $data["message"] = "";
+    $data["flag"] = 2;
+    $this->load->model("console");
+    if ($this->console->checkElectionState()) {
+      $data["status"] = "On";
+    } else {
+      $data["status"] = "Off";
+    }
+    $this->load->view("header", $data);
+    $this->load->view("console",$data);
+  }
+  function toggleElectionStatus() {
+    $this->load->model("console");
+    if ($this->console->checkElectionState()) {
+      $this->console->stopElection();
+    } else {
+      $this->console->startElection();
+    }
+    $this->showConsole();
+  }
+  function showManageEligibleVoters() {
+    $data["title"] = "Manage Eligible Voters";
+    $data["menu"] = array();
+    $data["message"] = "";
+    $data["flag"] = 4;
+    $this->load->view("header", $data);
+    $this->load->model("voters");
+    $data["voters"] = $this->voters->getVoters();
+    $this->load->view("manage_eligible_voters",$data);
+  }
+  function addVoter() {
+    $voter = $this->security->xss_clean($this->input->post('voter'));
+    $this->load->model("voters");
+    $this->voters->addVoter($voter);
+    $this->showManageEligibleVoters();
+  }
+  function deleteVoter() {
+    $this->load->model("voters");
+    if ($this->voters->deleteVoter($this->uri->segment(3))) {
+      $this->showManageEligibleVoters();
+    } else {
+      show_error("An unknown error occured", 500);
+    }
+  }
 }
 ?>

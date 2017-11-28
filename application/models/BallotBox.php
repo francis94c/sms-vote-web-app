@@ -14,7 +14,6 @@ class BallotBox extends CI_Model {
    * @return [type]        [description]
    */
   function vote($voter, $codes) {
-    //$votedCategories = array();
     $flags = array("fraud"=>0, "errors"=>0);
     $c = count($codes);
     for ($x = 0; $x < $c; $x++) {
@@ -40,8 +39,11 @@ class BallotBox extends CI_Model {
     $query = $this->db->get_where("ballot_box", array("candidate"=>$candidate));
     $votes = $query->num_rows();
     $query = $this->db->get("voters");
-    $result = ($votes / $query->num_rows()) * 100;
-    return $result;
+    if ($query->num_rows() > 0) {
+      $result = ($votes / $query->num_rows()) * 100;
+      return round($result, 2, PHP_ROUND_HALF_EVEN);
+    }
+    return 0;
   }
   /**
    * [castVote description]
@@ -61,7 +63,7 @@ class BallotBox extends CI_Model {
     return false;
   }
   private function resolveVoter($idKey) {
-    return $this->db->get_where("voters", array("identity_key" => $idKey))->result->$id;
+    return $this->db->get_where("voters", array("identity_key" => $idKey))->result()[0]->id;
   }
 }
 ?>
