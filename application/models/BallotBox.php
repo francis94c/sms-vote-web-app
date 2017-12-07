@@ -14,6 +14,7 @@ class BallotBox extends CI_Model {
    * @return [type]        [description]
    */
   function vote($voter, $codes) {
+    $this->load->model("sms");
     $flags = array("fraud"=>0, "errors"=>0);
     $c = count($codes);
     for ($x = 0; $x < $c; $x++) {
@@ -33,7 +34,17 @@ class BallotBox extends CI_Model {
         break;
       }
     }
+    if ($flags["fraud"] == 0 && $flags["errors"] == 0) {
+      $this->sms->sendSMS($this->resolveVoter($voter), "Your Vote(s) has been cast Succesfully.");
+    } elseif ($flags["fraud"] > 0) {
+      $this->sms->sendSMS($this->resolveVoter($voter), "Some or All of your votes have been deemed fraudulent.");
+    } elseif ($flags["errors"] > 0) {
+      $this->sms->sendSMS($this->resolveVoter($voter), "It's either you are not eligible to vote, or there was an error casting your vote(s).");
+    }
     return $flags;
+  }
+  function clearBallotBox() {
+    $this->db->empty_table("ballot_box");
   }
   function getResultForCandidate($candidate) {
     $query = $this->db->get_where("ballot_box", array("candidate"=>$candidate));

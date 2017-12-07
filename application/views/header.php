@@ -29,7 +29,7 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Raleway", sans-serif}
     <a href="<?php echo site_url("home/showConsole");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 2 ? "w3-text-teal" : ""; ?>"><i class="fa fa-terminal fa-fw w3-margin-right"></i>CONSOLE</a>
     <a href="<?php echo site_url("home/showLiveResults");?>" class="w3-bar-item w3-button w3-padding <?php echo $flag == 3 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>VIEW LIVE RESULTS</a>
     <a href="<?php echo site_url("home/showManageEligibleVoters");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 4 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>MANAGE ELIGIBLE VOTERS</a>
-    <a href="<?php echo site_url("home/showManageEligibleVoters");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 4 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>CHANGE LOGIN PASSWORD</a>
+    <a href="<?php echo site_url("home/showChangeLoginPassword");?>" onclick="w3_close()" class="w3-bar-item w3-button w3-padding <?php echo $flag == 5 ? "w3-text-teal" : ""; ?>"><i class="fa fa-flag fa-fw w3-margin-right"></i>CHANGE LOGIN PASSWORD</a>
   </div>
 </nav>
 

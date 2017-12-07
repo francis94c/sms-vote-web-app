@@ -179,6 +179,7 @@ class Home extends CI_Controller {
         $data["image_url"] = base_url("images/" . $candidates[$y]["image"] . ".jpg");
         $data["name"] = $candidates[$y]["first_name"] . " " . $candidates[$y]["last_name"] . " " . $candidates[$y]["middle_name"];
         $data["percent"] = $this->ballotbox->getResultForCandidate($candidates[$y]["id"]);
+        $data["candidate"] = $candidates[$y]["id"];
         $this->load->view("status_item", $data);
       }
     }
@@ -199,6 +200,7 @@ class Home extends CI_Controller {
     }
     $this->load->view("header", $data);
     $this->load->view("console",$data);
+    $this->load->view("scripts/core");
   }
   function toggleElectionStatus() {
     $this->load->model("console");
@@ -232,6 +234,58 @@ class Home extends CI_Controller {
     } else {
       show_error("An unknown error occured", 500);
     }
+  }
+  function showChangeLoginPassword() {
+    $data["title"] = "Change Login Password";
+    $data["menu"] = array();
+    $data["message"] = "";
+    $data["flag"] = 5;
+    $this->load->view("header", $data);
+    $this->load->view("change_login_password");
+  }
+  function changeLoginPassword() {
+    $oldPassword = $this->security->xss_clean($this->input->post('old-password'));
+    $newPassword = $this->security->xss_clean($this->input->post('new-password'));
+    $newPasswordAgain = $this->security->xss_clean($this->input->post('new-password-again'));
+    if ($newPassword == $newPasswordAgain) {
+      $this->load->model("users");
+      if (password_verify($oldPassword, $this->users->getHash($this->session->userdata("id")))) {
+        if ($this->users->changePassword($this->session->userdata("id"), $newPassword)) {
+          $data["title"] = "Change Login Password";
+          $data["menu"] = array();
+          $data["message"] = "<font color=\"green\">Password Changed</font>";
+          $data["flag"] = 5;
+          $this->load->view("header", $data);
+          $this->load->view("change_login_password");
+        } else {
+          $data["title"] = "Change Login Password";
+          $data["menu"] = array();
+          $data["message"] = "<font color=\"red\">Password Not Changed</font>";
+          $data["flag"] = 5;
+          $this->load->view("header", $data);
+          $this->load->view("change_login_password");
+        }
+      } else {
+        $data["title"] = "Change Login Password";
+        $data["menu"] = array();
+        $data["message"] = "<font color=\"red\">Password Not Verified</font>";
+        $data["flag"] = 5;
+        $this->load->view("header", $data);
+        $this->load->view("change_login_password");
+      }
+    } else {
+      $data["title"] = "Change Login Password";
+      $data["menu"] = array();
+      $data["message"] = "<font color=\"red\">Password Mismatch</font>";
+      $data["flag"] = 5;
+      $this->load->view("header", $data);
+      $this->load->view("change_login_password");
+    }
+  }
+  function clearElectionRecords() {
+    $this->load->model("ballotbox");
+    $this->ballotbox->clearBallotBox();
+    $this->showConsole();
   }
 }
 ?>

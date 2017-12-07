@@ -6,4 +6,4 @@ $ci->load->view("panel", array("text"=>"Election Processing"));
 <?php
 $ci->load->view("panel", array("text"=>"Actions"));
 ?>
-<button class="w3-button w3-gray w3-center">Clear Election Records</button>
+<button onclick="promptCleanBallotBox();" class="w3-button w3-gray w3-center">Clear Election Records</button>

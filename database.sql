@@ -19,6 +19,9 @@ FOREIGN KEY (voter) REFERENCES voters(id)) Engine=InnoDB;
 CREATE TABLE users (id int(1) PRIMARY KEY AUTO_INCREMENT,
 username VARCHAR(15) NOT NULL, password TEXT NOT NULL,
 last_login DATETIME) Engine=InnoDB;
+/*to_send*/
+CREATE TABLE to_send (_to int(7) NOT NULL, message TEXT NOT NULL, FOREIGN KEY (_to)
+REFERENCES voters(id));
 /*Insertions*/
 INSERT INTO preferences (key_name, key_value) VALUES ("election", "SUG Election");
 INSERT INTO preferences (key_name, key_value) VALUES ("in_session", "false");

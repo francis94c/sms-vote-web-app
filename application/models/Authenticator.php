@@ -13,7 +13,7 @@ class Authenticator extends CI_Model {
       $row = $query->row();
       $hash = $row->password;
       if (password_verify($password, $hash)) {
-        $data = array('validated'=>true);
+        $data = array('validated'=>true, 'id'=>$row->id);
         $this->session->set_userdata($data);
         return true;
       }
