@@ -37,9 +37,17 @@ class BallotBox extends CI_Model {
     if ($flags["fraud"] == 0 && $flags["errors"] == 0) {
       $this->sms->sendSMS($this->resolveVoter($voter), "Your Vote(s) has been cast Succesfully.");
     } elseif ($flags["fraud"] > 0) {
-      $this->sms->sendSMS($this->resolveVoter($voter), "Some or All of your votes have been deemed fraudulent.");
+      if ($this->validateVoter($voter)) {
+        $this->sms->sendSMS($this->resolveVoter($voter), "Some or All of your votes have been deemed fraudulent.");
+      } else {
+        $this->sms->sendInvalidSMS($voter, "Some or All of your votes have been deemed fraudulent.");
+      }
     } elseif ($flags["errors"] > 0) {
-      $this->sms->sendSMS($this->resolveVoter($voter), "It's either you are not eligible to vote, or there was an error casting your vote(s).");
+      if ($this->validateVoter($voter)) {
+        $this->sms->sendSMS($this->resolveVoter($voter), "It's either you are not eligible to vote, or there was an error casting your vote(s).");
+      } else {
+        $this->sms->sendInvalidSMS($voter, "It's either you are not eligible to vote, or there was an error casting your vote(s).");
+      }
     }
     return $flags;
   }
@@ -66,7 +74,14 @@ class BallotBox extends CI_Model {
     $data = array("candidate"=>$candidate, "voter"=>$voter, "category"=>$this->Candidates->getCategory($candidate));
     return $this->db->insert("ballot_box", $data);
   }
-  private function validateVoter($voter) {
+  function idHasMap($id) {
+    $query = $this->db->get_where("voters", array("id"=>$id));
+    if ($query->num_rows() > 0) {
+      return true;
+    }
+    return false;
+  }
+  function validateVoter($voter) {
     $query = $this->db->get_where("voters", array("identity_key"=>$voter));
     if ($query->num_rows() > 0) {
       return true;

@@ -54,26 +54,47 @@ class SMSVoteAPI extends CI_Controller {
   }
   function getMessages() {
     $this->load->model("sms");
+    $this->load->model("ballotbox");
     $messages = $this->sms->getMessages();
     for ($x = 0; $x < count($messages); $x++) {
-      $phone = $this->db->get_where("voters", array("id"=>$messages[$x]["_to"]))->result_array()[0]["identity_key"];
-      if (substr($phone, 0, 4) != "+234") {
-        $phone = substr($phone, 1);
-        $messages[$x]["_to"] = "+234" . $phone;
+      if ($this->ballotbox->idHasMap($messages[$x]["_to"])) {
+        $phone = $this->db->get_where("voters", array("id"=>$messages[$x]["_to"]))->result_array()[0]["identity_key"];
+        if (substr($phone, 0, 4) != "+234") {
+          $phone = substr($phone, 1);
+          $messages[$x]["_to"] = "+234" . $phone;
+        } else {
+          $messages[$x]["_to"] = $phone;
+        }
       } else {
-        $messages[$x]["_to"] = $phone;
+        $phone =$messages[$x]["_to"];
+        if (substr($phone, 0, 4) != "+234") {
+          $phone = substr($phone, 1);
+          $messages[$x]["_to"] = "+234" . $phone;
+        } else {
+          $messages[$x]["_to"] = $phone;
+        }
       }
     }
     echo json_encode($messages);
   }
   function deleteMessageByDestination() {
     $phone = $this->uri->segment(3);
-    $id = $this->db->get_where("voters", array("identity_key"=>$phone))->result_array()[0]["id"];
-    $this->load->model("sms");
-    if ($this->sms->deleteSMS($id)) {
-      echo "1";
+    $this->load->model("ballotbox");
+    if ($this->ballotbox->validateVoter($phone)) {
+      $id = $this->db->get_where("voters", array("identity_key"=>$phone))->result_array()[0]["id"];
+      $this->load->model("sms");
+      if ($this->sms->deleteSMS($id)) {
+        echo "1";
+      } else {
+        echo "0";
+      }
     } else {
-      echo "0";
+      $this->load->model("sms");
+      if ($this->sms->deleteInvalidSMS($phone)) {
+        echo "1";
+      } else {
+        echo "0";
+      }
     }
   }
 }
